@@ -154,8 +154,8 @@ def change_generation(generation):
 
 
 def analyse(best_gene, best_gene_generation, generation, i):
-    if not best_gene or (best_gene and best_gene.fitness > generation.best_gene.fitness):
-        return generation.best_gene, i, False
+    if not best_gene or best_gene.fitness > generation.best_gene.fitness:
+        return generation.best_gene.clone(), i, False
 
     return best_gene, best_gene_generation, (i - best_gene_generation) > BEST_GENE_GENERATION_LIMIT
 
@@ -194,7 +194,7 @@ def main():
         time.sleep(WAIT_TIME_FOR_NEW_GENERATION)
         change_generation(generation)
 
-    print(' O melhor gene para o problema é: ')
+    print(' Melhor solução encontrada para o problema: ')
     print(f' Fitness: {best_gene.fitness} - {" -> ".join(best_gene.gene_code)} -> {best_gene.gene_code[0]}')
 
 
