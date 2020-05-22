@@ -22,44 +22,78 @@ def main():
                 pontoPartida(linha,coluna)
 
 def pontoPartida(linha, coluna):
-    visitado = [linha,"-",coluna]
-    #prox.append([linha-1,coluna]
-    try:
-        if ((linha-1) > 0 and (labirinto[linha-1][coluna] != 0)):
-            print('1')
-            proximo(visitado, linha-1, coluna)
-        if ((coluna-1) > 0 and (labirinto[linha][coluna-1] != 0)):
-            print('2')
-            proximo(visitado, linha, coluna-1)
-        if ((linha+1) < len(labirinto) and (labirinto[linha+1][coluna] != 0)):
-            print('3')
-            proximo(visitado, linha+1, coluna)
-        if ((coluna+1) < len(labirinto[linha]) and (labirinto[linha][coluna+1] != 0)):
-            print('4')
-            proximo(visitado, linha, coluna+1)
-    except:
-        print("except on pontoPartida")
-        #return []
+    visitado = []
+    retorno = []
+    novo = []
+
+    if (linha-1 >= 0 and labirinto[linha-1][coluna] != 0):
+        retorno = proximo(visitado, linha-1, coluna)
+    if (coluna-1 >= 0 and labirinto[linha][coluna-1] != 0):
+        novo = proximo(visitado, linha, coluna-1)
+        if(retorno != [] and novo != []):
+            retorno = compara(retorno, novo)
+        elif (novo != []):
+            retorno = novo
+    if (linha+1 < len(labirinto) and labirinto[linha+1][coluna] != 0):
+        novo = proximo(visitado, linha+1, coluna)
+        if(retorno != [] and novo != []):
+            retorno = compara(retorno, novo)
+        elif (novo != []):
+            retorno = novo
+    if (coluna+1 < len(labirinto[linha]) and labirinto[linha][coluna+1] != 0):
+        novo = proximo(visitado, linha, coluna+1)
+        if(retorno != [] and novo != []):
+            retorno = compara(retorno, novo)
+        elif (novo != []):
+            retorno = novo
+    #print(" caminho total: ", retorno)
     
 def proximo(lista, linha, coluna):
     print(linha, coluna)
-    lista.append([linha,"-",coluna])
+    lista.append([linha,coluna])
+    if labirinto[linha][coluna] == "f":
+        print("caminho para o f:", lista)
+        return lista
+    retorno = []
+    novo = []
     try:
-        if ( not [linha-1,"-",coluna] in lista and linha-1 > 0 and labirinto[linha-1][coluna] != 0):
-            proximo(lista, linha-1, coluna)
-            print('1v')
-        if ( not [linha,"-",coluna-1] in lista and coluna-1 > 0 and labirinto[linha][coluna-1] != 0):
-            proximo(lista, linha, coluna-1)
-            print('2v')
-        if ( not [linha+1,"-",coluna] in lista and (linha+1) < len(labirinto) and (labirinto[linha+1][coluna] != 0)):
-            proximo(lista, linha+1, coluna)
-            print('3v')
-        if ( not ([linha,"-",coluna+1] in lista) and (coluna+1) < len(labirinto[linha]) and (labirinto[linha][coluna+1] != 0)):
-            proximo(lista, linha, coluna+1)
-            print('4v')
+        if (not [linha-1,coluna] in lista and linha-1 >= 0 and labirinto[linha-1][coluna] != 0):
+            retorno = proximo(lista, linha-1, coluna)
+        if (not [linha,coluna-1] in lista and coluna-1 >= 0 and labirinto[linha][coluna-1] != 0):
+            novo = proximo(lista, linha, coluna-1)
+            if(retorno != [] and novo != []):
+                retorno = compara(retorno, novo)
+            elif (novo != []):
+                retorno = novo
+        if (not [linha+1,coluna] in lista and (linha+1) < len(labirinto) and (labirinto[linha+1][coluna] != 0)):
+            novo = proximo(lista, linha+1, coluna)
+            if(retorno != [] and novo != []):
+                retorno = compara(retorno, novo)
+            elif (novo != []):
+                retorno = novo
+        if (not [linha,coluna+1] in lista and (coluna+1) < len(labirinto[linha]) and (labirinto[linha][coluna+1] != 0)):
+            novo = proximo(lista, linha, coluna+1)
+            if(retorno != [] and novo != []):
+                retorno = compara(retorno, novo)
+            elif (novo != []):
+                retorno = novo
+        return []
     except:
         print("expection on proximo")
-        #return []
     
+def compara(velho, novo):
+    velhoCount = 0
+    novoCount = 0
+    for linha in range(len(velho)):
+        if(isinstance(labirinto[velho[linha][0]][velho[linha][1]], int) ):
+            velhoCount = velhoCount + labirinto[velho[linha][0]][velho[linha][1]]
+    for linha in range(len(novo)):
+        if(isinstance(labirinto[velho[linha][0]][velho[linha+0][1]], int) ):
+            novoCount = novoCount + labirinto[velho[linha][0]][velho[linha+0][1]]
+    print()
+    if(novoCount < velhoCount):
+        return novo
+    return velho
+
 if __name__ == '__main__':
     main()
